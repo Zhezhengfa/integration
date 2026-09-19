@@ -74,19 +74,64 @@
     <section id="rooms" class="mb-5">
       <h2 class="section-title h4 mb-3">自习室查询</h2>
       <div class="alert alert-secondary">
-        （第二步将在此处添加自习室筛选交互，数据写死在 JS 数组，按楼层／开放状态过滤。）
+        <section id="rooms" class="mb-5">
+          <h2 class="section-title h4 mb-3">自习室查询</h2>
+          <div class="row g-2 mb-3">
+            <div class="col-md-3">
+              <label class="form-label small">按楼层</label>
+              <select class="form-select form-select-sm" id="filter-floor">
+                <option value="">全部楼层</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">开放状态</label>
+              <select class="form-select form-select-sm" id="filter-status">
+                <option value="">全部</option>
+                <option value="open">开放中</option>
+                <option value="close">已关闭</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">关键词</label>
+              <input type="text" class="form-control form-select-sm" id="filter-keyword" placeholder="名称/位置">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <button class="btn btn-outline-secondary btn-sm w-100" id="btn-reset">重置筛选</button>
+            </div>
+          </div>
+          <p class="text-muted small" id="room-count">共 0 间</p>
+          <div class="row g-3" id="room-list"></div>
+      </section>
       </div>
     </section>
     <section id="stats" class="mb-5">
       <h2 class="section-title h4 mb-3">使用统计</h2>
       <div class="alert alert-secondary">
-        （第二步将在此处添加使用统计图表，加载 data/rooms.json 渲染各自习室使用量。）
+        <section id="stats" class="mb-5">
+          <h2 class="section-title h4 mb-3">使用统计</h2>
+          <p id="status" class="alert alert-warning" style="display:none"></p>
+          <p class="text-muted" id="sub-title">数据来源：校园自习室模拟数据集</p>
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <h3 class="h6">各自习室本周使用量（ECharts 柱状图）</h3>
+              <div id="bar-chart" style="height:360px"></div>
+            </div>  
+            <div class="col-lg-6">
+              <h3 class="h6">使用趋势（ECharts 折线图）</h3>
+              <div id="line-chart" style="height:360px"></div>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
   </main>
   <footer class="bg-light py-3 text-center text-muted small">
     迷你版校园信息中心 · 课堂案例复现
   </footer>
-  <script src="libs/bootstrap.bundle.min.js"></script>
+    <script src="libs/jquery-3.7.1.min.js"></script>
+    <script src="libs/bootstrap.bundle.min.js"></script>
+    <script src="libs/echarts.min.js"></script>
+    <script src="app.js"></script>
+</body>
 </body>
 </html>
