@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园三维导览</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: #87ceeb; }
+    #back {
+      position: fixed; top: 12px; left: 12px; z-index: 10;
+      padding: 8px 16px; background: rgba(13,110,253,.85); color: #fff;
+      border: none; border-radius: 6px; cursor: pointer; font-size: 14px;
+    }
+    #back:hover { background: rgba(13,110,253,1); }
+    #tip {
+      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,.5); color: #fff; padding: 6px 14px;
+      border-radius: 20px; font-size: 12px; z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <button id="back" onclick="location.href='../index.html'">← 返回首页</button>
+  <div id="tip">鼠标拖拽旋转 · 滚轮缩放 · 右键平移</div>
+  <script src="../libs/three.min.js"></script>
+  <script src="../libs/OrbitControls.js"></script>
+  <script>
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87ceeb);
+    scene.fog = new THREE.Fog(0x87ceeb, 20, 60);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+    camera.position.set(12, 10, 14);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    document.body.appendChild(renderer.domElement);
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+    sun.position.set(15, 20, 10);
+    sun.castShadow = true;
+    scene.add(sun);
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(60, 60),
+      new THREE.MeshStandardMaterial({ color: 0x7cb342 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+    const building = new THREE.Mesh(
+      new THREE.BoxGeometry(10, 6, 6),
+      new THREE.MeshStandardMaterial({ color: 0xf5f5f5 })
+    );
+    building.position.set(0, 3, -2);
+    building.castShadow = true;
+    building.receiveShadow = true;
+    scene.add(building);
+    const roof = new THREE.Mesh(
+      new THREE.BoxGeometry(10.5, 0.8, 6.5),
+      new THREE.MeshStandardMaterial({ color: 0xb71c1c })
+    );
+    roof.position.set(0, 6.4, -2);
+    roof.castShadow = true;
+    scene.add(roof);
+    const library = new THREE.Mesh(
+      new THREE.BoxGeometry(6, 8, 5),
+      new THREE.MeshStandardMaterial({ color: 0xe0e0e0 })
+    );
+    library.position.set(-9, 4, -2);
+    library.castShadow = true;
+    library.receiveShadow = true;
+    scene.add(library);
+    const dorm = new THREE.Mesh(
+      new THREE.BoxGeometry(7, 10, 5),
+      new THREE.MeshStandardMaterial({ color: 0xffccbc })
+    );
+    dorm.position.set(9, 5, -2);
+    dorm.castShadow = true;
+    dorm.receiveShadow = true;
+    scene.add(dorm);
+    const playground = new THREE.Mesh(
+      new THREE.CircleGeometry(5, 32),
+      new THREE.MeshStandardMaterial({ color: 0xc62828 })
+    );
+    playground.rotation.x = -Math.PI / 2;
+    playground.position.set(0, 0.02, 10);
+    playground.receiveShadow = true;
+    scene.add(playground);
+    const pole = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.08, 0.08, 6, 8),
+      new THREE.MeshStandardMaterial({ color: 0x9e9e9e })
+    );
+    pole.position.set(0, 3, -6);
+    scene.add(pole);
+    const flag = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 1.2),
+      new THREE.MeshStandardMaterial({ color: 0xe53935, side: THREE.DoubleSide })
+    );
+    flag.position.set(1.1, 5.2, -6);
+    scene.add(flag);
+    const makeTree = (x, z) => {
+      const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.2, 0.25, 2, 8),
+        new THREE.MeshStandardMaterial({ color: 0x6d4c41 })
+      );
+      trunk.position.set(x, 1, z);
+      trunk.castShadow = true;
+      scene.add(trunk);
+      const leaves = new THREE.Mesh(
+        new THREE.SphereGeometry(1.2, 16, 16),
+        new THREE.MeshStandardMaterial({ color: 0x2e7d32 })
+      );
+      leaves.position.set(x, 2.6, z);
+      leaves.castShadow = true;
+      scene.add(leaves);
+    };
+    makeTree(-6, 4);
+    makeTree(6, 4);
+    makeTree(-13, 3);
+    makeTree(13, 3);
+    const animate = () => {
+      requestAnimationFrame(animate);
+      flag.rotation.y = Math.sin(Date.now() * 0.002) * 0.3;
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    animate();
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
